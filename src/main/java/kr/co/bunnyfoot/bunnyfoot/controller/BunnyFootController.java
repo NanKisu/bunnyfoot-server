@@ -33,7 +33,6 @@ public class BunnyFootController {
   public String uploadSingle(@RequestParam("image") MultipartFile image) throws Exception {
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
     
-    
     File imageFile = new File(image.getOriginalFilename()); 
     if(imageFile.createNewFile()) { 
       try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
