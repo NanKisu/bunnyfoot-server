@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import kr.co.bunnyfoot.bunnyfoot.dto.BbtiDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
 
 @RestController
@@ -45,5 +47,13 @@ public class BunnyFootController {
     predictClient.predict(image);
     
     return "uploaded";
+  }
+  
+  @PostMapping("/bbti")
+  public BbtiDto getBbti(List<Integer> answers, @RequestParam("image") MultipartFile image) throws Exception {
+    BbtiDto result = new BbtiDto();
+    result.setBbti(null);
+    result.setPredict(predictClient.predict(image));
+    return result;
   }
 }
