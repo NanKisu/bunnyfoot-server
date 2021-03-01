@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class BbtiDto {
   private String bbti;
-  private String predict;
+  private Double predict;
 }

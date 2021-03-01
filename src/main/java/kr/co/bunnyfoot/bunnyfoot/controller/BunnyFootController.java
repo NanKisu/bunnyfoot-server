@@ -53,7 +53,7 @@ public class BunnyFootController {
   public BbtiDto getBbti(@RequestParam("answers") List<Integer> answers, @RequestParam("image") MultipartFile image) throws Exception {
     BbtiDto result = new BbtiDto();
     result.setBbti(null);
-    result.setPredict(predictClient.predict(image));
+    result.setPredict(predictClient.predict(image).getProbability());
     return result;
   }
 }
