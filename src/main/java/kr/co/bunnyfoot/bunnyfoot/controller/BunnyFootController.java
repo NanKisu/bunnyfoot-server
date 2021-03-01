@@ -50,7 +50,7 @@ public class BunnyFootController {
   }
   
   @PostMapping("/bbti")
-  public BbtiDto getBbti(List<Integer> answers, @RequestParam("image") MultipartFile image) throws Exception {
+  public BbtiDto getBbti(@RequestParam("answers") List<Integer> answers, @RequestParam("image") MultipartFile image) throws Exception {
     BbtiDto result = new BbtiDto();
     result.setBbti(null);
     result.setPredict(predictClient.predict(image));
