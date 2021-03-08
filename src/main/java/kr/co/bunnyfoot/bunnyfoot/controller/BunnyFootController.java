@@ -28,7 +28,7 @@ import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
 
 @RestController
-@CrossOrigin(origins = "*", methods = RequestMethod.POST)
+@CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.GET})
 @RequestMapping("/")
 public class BunnyFootController {
   
