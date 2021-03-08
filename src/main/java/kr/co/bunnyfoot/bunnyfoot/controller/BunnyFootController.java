@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/")
 public class BunnyFootController {
   
@@ -48,33 +50,6 @@ public class BunnyFootController {
       @RequestPart(value = "image", required = true) MultipartFile image) throws Exception {
     
     BbtiResDto result = new BbtiResDto();
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
-    
-    File imageFile = new File(image.getOriginalFilename()); 
-    if(imageFile.createNewFile()) { 
-      try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
-        fos.write(image.getBytes()); 
-      } 
-    }
-    
-    amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
-    
-    result.setBbti(null);
-    
-    PredictResDto predictRes = predictClient.predict(image);
-    if(predictRes.getProbability() < 0.3) {      
-      result.setPredict("NORMAL");
-    }
-    else if(predictRes.getProbability() < 0.5) {      
-      result.setPredict("WATCH");
-    }
-    else if(predictRes.getProbability() < 0.7) {      
-      result.setPredict("WARNING");
-    }
-    else {      
-      result.setPredict("DANGER");
-    }
-    
     return result;
   }
 }
