@@ -13,6 +13,7 @@ public class SpringFoxConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .host("13.209.196.50/server")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("kr.co.bunnyfoot.bunnyfoot.controller"))
                 .paths(PathSelectors.any())
