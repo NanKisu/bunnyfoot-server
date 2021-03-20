@@ -54,18 +54,34 @@ public class BunnyFootController {
   })
   public BbtiResDto getBbti(
       @RequestPart(value = "answers", required = true) String answers,
-      @RequestPart(value = "image", required = true) MultipartFile image) throws Exception {
+      @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
     BbtiResDto result = new BbtiResDto();
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
     
-    File imageFile = new File(image.getOriginalFilename()); 
-    if(imageFile.createNewFile()) { 
-      try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
-        fos.write(image.getBytes()); 
-      } 
+    if(!ObjectUtils.isEmpty(image)) {
+      SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+      File imageFile = new File(image.getOriginalFilename()); 
+      if(imageFile.createNewFile()) { 
+        try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
+          fos.write(image.getBytes()); 
+        } 
+      }
+      
+      amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
+      
+      PredictResDto predictRes = predictClient.predict(image);
+      if(predictRes.getProbability() < 0.3) {      
+        result.setPredict("NORMAL");
+      }
+      else if(predictRes.getProbability() < 0.5) {      
+        result.setPredict("WATCH");
+      }
+      else if(predictRes.getProbability() < 0.7) {      
+        result.setPredict("WARNING");
+      }
+      else {      
+        result.setPredict("DANGER");
+      }
     }
-    
-    amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
     
     Map<String, QuestionDto> questionMap = questionConfig.getQuestionMap();
     String[] answerList = answers.split(",");
@@ -90,19 +106,7 @@ public class BunnyFootController {
       }
     }
     
-    PredictResDto predictRes = predictClient.predict(image);
-    if(predictRes.getProbability() < 0.3) {      
-      result.setPredict("NORMAL");
-    }
-    else if(predictRes.getProbability() < 0.5) {      
-      result.setPredict("WATCH");
-    }
-    else if(predictRes.getProbability() < 0.7) {      
-      result.setPredict("WARNING");
-    }
-    else {      
-      result.setPredict("DANGER");
-    }
+    
     
     return result;
   }
