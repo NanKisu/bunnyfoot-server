@@ -10,3 +10,117 @@ cloud:
       instanceProfile: true
       accessKey: ${S3_ACCESS_KEY} 
       secretKey: ${S3_SECRET_KEY}
+
+question:
+  questionMap:
+    1:
+      curNo: 1
+      yestNextNo: 13
+      noNextNo: 19
+      result: null
+    13:
+      curNo: 13
+      yestNextNo: 137
+      noNextNo: 132
+      result: null 
+    137:
+      curNo: 137
+      yestNextNo: 137y8
+      noNextNo: 137n8
+      result: null 
+    137y8:
+      curNo: 137y8
+      yestNextNo: 137y89
+      noNextNo: 137y89
+      result: null
+    137y89:
+      curNo: 137y89
+      yestNextNo: 100
+      noNextNo: 101
+      result: null
+    137n8:
+      curNo: 137n8
+      yestNextNo: 137n84
+      noNextNo: 137n810
+      result: null
+    137n84:
+      curNo: 137n84
+      yestNextNo: 100
+      noNextNo: 103
+      result: null
+    137n810:
+      curNo: 137n810
+      yestNextNo: 103
+      noNextNo: 103
+      result: null
+    132:
+      curNo: 132
+      yestNextNo: 1326
+      noNextNo: 1328
+      result: null 
+    1326:
+      curNo: 1326
+      yestNextNo: 13269
+      noNextNo: 13267
+      result: null 
+    13269:
+      curNo: 13269
+      yestNextNo: 103
+      noNextNo: 101
+      result: null 
+    13267:
+      curNo: 13267
+      yestNextNo: 103
+      noNextNo: 100
+      result: null 
+    1328:
+      curNo: 1328
+      yestNextNo: 13285
+      noNextNo: 13286
+      result: null 
+    13285:
+      curNo: 13285
+      yestNextNo: 100
+      noNextNo: 103
+      result: null 
+    13286:
+      curNo: 13286
+      yestNextNo: 102
+      noNextNo: 103
+      result: null   
+    19:
+      curNo: 19
+      yestNextNo: 192
+      noNextNo: 192
+      result: null 
+    192:
+      curNo: 192
+      yestNextNo: 1925
+      noNextNo: 1925
+      result: null  
+    1925:
+      curNo: 1925
+      yestNextNo: 100
+      noNextNo: 101
+      result: null   
+    100:
+      curNo: 100
+      yestNextNo: null
+      noNextNo: null
+      result: DODO
+    101:
+      curNo: 101
+      yestNextNo: null
+      noNextNo: null
+      result: INSSA
+    102:
+      curNo: 102
+      yestNextNo: null
+      noNextNo: null
+      result: AGYO
+    103:
+      curNo: 103
+      yestNextNo: null
+      noNextNo: null
+      result: SUNDING
+      

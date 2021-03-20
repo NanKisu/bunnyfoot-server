@@ -5,8 +5,10 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +24,11 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModelProperty;
+import kr.co.bunnyfoot.bunnyfoot.config.QuestionConfig;
 import kr.co.bunnyfoot.bunnyfoot.dto.BbtiReqDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.BbtiResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
+import kr.co.bunnyfoot.bunnyfoot.dto.QuestionDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
 
 @RestController
@@ -37,9 +41,12 @@ public class BunnyFootController {
   @Autowired
   private PredictClient predictClient;
   
+  @Autowired
+  private QuestionConfig questionConfig;
+  
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
-  
+    
   @PostMapping("bbti")
   @ApiImplicitParams({
     @ApiImplicitParam(name = "answers", value = "answers", dataType = "string", paramType = "form", example = "0,0,0,0,0,0,0,0,0", required = true),
@@ -48,7 +55,6 @@ public class BunnyFootController {
   public BbtiResDto getBbti(
       @RequestPart(value = "answers", required = true) String answers,
       @RequestPart(value = "image", required = true) MultipartFile image) throws Exception {
-    
     BbtiResDto result = new BbtiResDto();
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
     
@@ -61,7 +67,28 @@ public class BunnyFootController {
     
     amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
     
-    result.setBbti(null);
+    Map<String, QuestionDto> questionMap = questionConfig.getQuestionMap();
+    String[] answerList = answers.split(",");
+    Integer cur = 1;
+    QuestionDto curQuestion = questionMap.get("1");
+    while(true) {
+      if(!ObjectUtils.isEmpty(curQuestion.getResult())) {
+        result.setBbti(curQuestion.getResult());
+        break;
+      }
+      
+      if(answerList[cur - 1].equals("0")) {
+        curQuestion = questionMap.get(curQuestion.getYestNextNo());
+      }
+      else {
+        curQuestion = questionMap.get(curQuestion.getNoNextNo());        
+      }
+      System.out.println(curQuestion.getCurNo());
+      cur = Integer.parseInt(curQuestion.getCurNo().substring(curQuestion.getCurNo().length() - 1));
+      if(ObjectUtils.isEmpty(curQuestion)) {
+        break;
+      }
+    }
     
     PredictResDto predictRes = predictClient.predict(image);
     if(predictRes.getProbability() < 0.3) {      
