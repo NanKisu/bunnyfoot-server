@@ -67,19 +67,23 @@ public class BunnyFootController {
       }
       
       amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
-      
-      PredictResDto predictRes = predictClient.predict(image);
-      if(predictRes.getProbability() < 0.3) {      
-        result.setPredict("NORMAL");
+      try {
+        PredictResDto predictRes = predictClient.predict(image);
+        if(predictRes.getProbability() < 0.3) {      
+          result.setPredict("NORMAL");
+        }
+        else if(predictRes.getProbability() < 0.5) {      
+          result.setPredict("WATCH");
+        }
+        else if(predictRes.getProbability() < 0.7) {      
+          result.setPredict("WARNING");
+        }
+        else {      
+          result.setPredict("DANGER");
+        }
       }
-      else if(predictRes.getProbability() < 0.5) {      
-        result.setPredict("WATCH");
-      }
-      else if(predictRes.getProbability() < 0.7) {      
-        result.setPredict("WARNING");
-      }
-      else {      
-        result.setPredict("DANGER");
+      catch (Exception e) {
+        result.setPredict("ERROR");
       }
     }
     
@@ -99,7 +103,6 @@ public class BunnyFootController {
       else {
         curQuestion = questionMap.get(curQuestion.getNoNextNo());        
       }
-      System.out.println(curQuestion.getCurNo());
       cur = Integer.parseInt(curQuestion.getCurNo().substring(curQuestion.getCurNo().length() - 1));
       if(ObjectUtils.isEmpty(curQuestion)) {
         break;
