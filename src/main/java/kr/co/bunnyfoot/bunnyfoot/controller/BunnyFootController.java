@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiModelProperty;
 import kr.co.bunnyfoot.bunnyfoot.config.QuestionConfig;
 import kr.co.bunnyfoot.bunnyfoot.dto.BbtiReqDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.BbtiResDto;
+import kr.co.bunnyfoot.bunnyfoot.dto.MySlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.QuestionDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.SlackSendDto;
@@ -118,19 +119,15 @@ public class BunnyFootController {
     return result;
   }
   
-  @GetMapping("sendSlackMsg")
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "channel", value = "channel", dataType = "string", paramType = "query", example = "welcome", required = true),
-    @ApiImplicitParam(name = "msg", value = "msg", dataType = "string", paramType = "query", example = "welcome", required = true)
-  })
-  public String sendSlackMsg(String channel, String msg) {
+  @PostMapping("sendSlackMsg")
+  public String sendSlackMsg(@RequestBody MySlackSendDto mySlackSend) {
     SlackSendDto slackSend = new SlackSendDto();
-    slackSend.setText(msg);
+    slackSend.setText(mySlackSend.getMsg());
     
-    if(channel.equals("welcome")) {      
+    if(mySlackSend.getChannel().equals("welcome")) {      
       slackClient.sendSlackMsgToWelcome(slackSend);
     }
-    else if(channel.equals("error")){
+    else if(mySlackSend.getChannel().equals("error")){
       slackClient.sendSlackMsgToError(slackSend);      
     }
     else {
