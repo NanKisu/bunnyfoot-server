@@ -11,6 +11,9 @@ cloud:
       accessKey: ${S3_ACCESS_KEY} 
       secretKey: ${S3_SECRET_KEY}
 
+slack.welcome:  ${SLACK_WELCOME}
+slack.error: ${SLACK_ERROR}
+
 question:
   questionMap:
     1:

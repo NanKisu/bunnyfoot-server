@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,9 @@ import kr.co.bunnyfoot.bunnyfoot.dto.BbtiReqDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.BbtiResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.QuestionDto;
+import kr.co.bunnyfoot.bunnyfoot.dto.SlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
+import kr.co.bunnyfoot.bunnyfoot.feign.SlackClient;
 
 @RestController
 @RequestMapping("/")
@@ -40,6 +43,9 @@ public class BunnyFootController {
   
   @Autowired
   private PredictClient predictClient;
+  
+  @Autowired
+  private SlackClient slackClient;
   
   @Autowired
   private QuestionConfig questionConfig;
@@ -109,8 +115,28 @@ public class BunnyFootController {
       }
     }
     
-    
-    
     return result;
+  }
+  
+  @GetMapping("sendSlackMsg")
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "channel", value = "channel", dataType = "string", paramType = "query", example = "welcome", required = true),
+    @ApiImplicitParam(name = "msg", value = "msg", dataType = "string", paramType = "query", example = "welcome", required = true)
+  })
+  public String sendSlackMsg(String channel, String msg) {
+    SlackSendDto slackSend = new SlackSendDto();
+    slackSend.setText(msg);
+    
+    if(channel.equals("welcome")) {      
+      slackClient.sendSlackMsgToWelcome(slackSend);
+    }
+    else if(channel.equals("error")){
+      slackClient.sendSlackMsgToError(slackSend);      
+    }
+    else {
+      return "FAIL";
+    }
+    
+    return "SUCCESS";
   }
 }
