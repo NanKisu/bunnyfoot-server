@@ -34,6 +34,7 @@ import kr.co.bunnyfoot.bunnyfoot.dto.QuestionDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.SlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
 import kr.co.bunnyfoot.bunnyfoot.feign.SlackClient;
+import kr.co.bunnyfoot.bunnyfoot.googlaanalytics.GoogleAnalyticsReporting;
 
 @RestController
 @RequestMapping("/")
@@ -47,6 +48,9 @@ public class BunnyFootController {
   
   @Autowired
   private SlackClient slackClient;
+  
+  @Autowired
+  private GoogleAnalyticsReporting googleAnalyticsReporting;
   
   @Autowired
   private QuestionConfig questionConfig;
@@ -117,6 +121,11 @@ public class BunnyFootController {
     }
     
     return result;
+  }
+  
+  @GetMapping("/pageView")
+  public String getPageView() {
+    return googleAnalyticsReporting.getPageView();
   }
   
   @PostMapping("sendSlackMsg")
