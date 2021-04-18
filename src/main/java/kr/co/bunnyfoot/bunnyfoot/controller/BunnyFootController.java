@@ -124,7 +124,7 @@ public class BunnyFootController {
     return result;
   }
   
-  @GetMapping("/pageView")
+  @GetMapping("pageView")
   public String getPageView() {
     return googleAnalyticsReporting.getPageView();
   }
