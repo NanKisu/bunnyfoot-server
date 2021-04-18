@@ -1,32 +1,29 @@
 package kr.co.bunnyfoot.bunnyfoot.googlaanalytics;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
-import com.google.api.services.analyticsreporting.v4.AnalyticsReportingScopes;
 import com.google.api.services.analyticsreporting.v4.AnalyticsReporting;
-
+import com.google.api.services.analyticsreporting.v4.AnalyticsReportingScopes;
 import com.google.api.services.analyticsreporting.v4.model.DateRange;
 import com.google.api.services.analyticsreporting.v4.model.GetReportsRequest;
 import com.google.api.services.analyticsreporting.v4.model.GetReportsResponse;
 import com.google.api.services.analyticsreporting.v4.model.Metric;
-import com.google.api.services.analyticsreporting.v4.model.Dimension;
 import com.google.api.services.analyticsreporting.v4.model.ReportRequest;
 
 @Component
 public class GoogleAnalyticsReporting {
   private final String APPLICATION_NAME = "GoogleAnalyticsReporting";
   private final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-  private final String KEY_FILE_LOCATION = "bunnyfoot.json";
   private final String VIEW_ID = "240306840";
   private AnalyticsReporting analyticsReportingService;
   

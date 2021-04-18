@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +22,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiModelProperty;
 import kr.co.bunnyfoot.bunnyfoot.config.QuestionConfig;
-import kr.co.bunnyfoot.bunnyfoot.dto.BbtiReqDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.BbtiResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.MySlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
@@ -74,8 +69,9 @@ public class BunnyFootController {
       SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
       File imageFile = new File(image.getOriginalFilename()); 
       if(imageFile.createNewFile()) { 
-        FileOutputStream fos = new FileOutputStream(imageFile);
-        fos.write(image.getBytes()); 
+    	try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
+          fos.write(image.getBytes()); 
+        } 
       }
       
       amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
@@ -154,7 +150,7 @@ public class BunnyFootController {
 	  SlackSendDto slackSend = new SlackSendDto();
 	  String errMsg = "";
 	  for(StackTraceElement ste : e.getStackTrace()) {
-		  errMsg += ste.toString() + "\n";
+		errMsg += ste.toString() + "\n";
 	  }
 	  slackSend.setText(errMsg);
 	  slackClient.sendSlackMsgToError(slackSend);
