@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,12 +74,12 @@ public class BunnyFootController {
       SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
       File imageFile = new File(image.getOriginalFilename()); 
       if(imageFile.createNewFile()) { 
-        try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
-          fos.write(image.getBytes()); 
-        } 
+        FileOutputStream fos = new FileOutputStream(imageFile);
+        fos.write(image.getBytes()); 
       }
       
       amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
+
       try {
         PredictResDto predictRes = predictClient.predict(image);
         if(predictRes.getProbability() < 0.3) {      
@@ -96,6 +97,7 @@ public class BunnyFootController {
       }
       catch (Exception e) {
         result.setPredict("ERROR");
+        exceptionHandeler(e);
       }
     }
     
@@ -145,5 +147,16 @@ public class BunnyFootController {
     }
     
     return "SUCCESS";
+  }
+  
+  @ExceptionHandler(Exception.class)
+  public void exceptionHandeler(Exception e) {
+	  SlackSendDto slackSend = new SlackSendDto();
+	  String errMsg = "";
+	  for(StackTraceElement ste : e.getStackTrace()) {
+		  errMsg += ste.toString() + "\n";
+	  }
+	  slackSend.setText(errMsg);
+	  slackClient.sendSlackMsgToError(slackSend);
   }
 }
