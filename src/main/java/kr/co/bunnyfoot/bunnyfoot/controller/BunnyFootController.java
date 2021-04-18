@@ -38,6 +38,7 @@ import kr.co.bunnyfoot.bunnyfoot.googlaanalytics.GoogleAnalyticsReporting;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin(origins="*", allowedHeaders="*")
 public class BunnyFootController {
   
   @Autowired
