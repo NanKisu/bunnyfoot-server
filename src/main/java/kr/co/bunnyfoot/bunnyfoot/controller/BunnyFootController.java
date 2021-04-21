@@ -3,7 +3,9 @@ package kr.co.bunnyfoot.bunnyfoot.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -142,6 +144,79 @@ public class BunnyFootController {
       return "FAIL";
     }
     
+    return "SUCCESS";
+  }
+  
+  @GetMapping("test")
+  public String testResult() {
+    BbtiResDto result;
+    Integer total, dodo, inssa, agyo, sunding, error;
+    List<Integer> answers = new ArrayList<Integer>();
+    
+    total = 0;
+    dodo = 0;
+    inssa = 0;
+    agyo = 0;
+    sunding = 0;
+    error = 0;
+    for(int a1 = 0; a1 <= 1; a1++) {
+      for(int a2 = 0; a2 <= 1; a2++) {
+        for(int a3 = 0; a3 <= 1; a3++) {
+          for(int a4 = 0; a4 <= 1; a4++) {
+            for(int a5 = 0; a5 <= 1; a5++) {
+              for(int a6 = 0; a6 <= 1; a6++) {
+                for(int a7 = 0; a7 <= 1; a7++) {
+                  for(int a8 = 0; a8 <= 1; a8++) {
+                    for(int a9 = 0; a9 <= 1; a9++) {
+                      for(int a10 = 0; a10 <= 1; a10++) {
+                        try {
+                          answers.add(a1);
+                          answers.add(a2);
+                          answers.add(a3);
+                          answers.add(a4);
+                          answers.add(a5);
+                          answers.add(a6);
+                          answers.add(a7);
+                          answers.add(a8);
+                          answers.add(a9);
+                          answers.add(a10);
+                          result = getBbti(answers.toString().replace("[", "").replace("]", "").replace(" ", ""), null);
+                          switch(result.getBbti()) {
+                            case "DODO":
+                              dodo++;
+                              break;
+                            case "INSSA":
+                              inssa++;
+                              break;
+                            case "AGYO":
+                              agyo++;
+                              break;
+                            case "SUNDING":
+                              sunding++;
+                              break;
+                          }
+                        } catch (Exception e) {
+                          System.out.println(answers.toString());
+                          error++;
+                        }
+                        total++;
+                        answers.clear();
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    System.out.println("TOTAL: " + total);
+    System.out.println("DODO: " + dodo);
+    System.out.println("INSSA: " + inssa);
+    System.out.println("AGYO: " + agyo);
+    System.out.println("SUNDING: " + sunding);
+    System.out.println("ERROR: " + error);
     return "SUCCESS";
   }
   
