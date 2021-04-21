@@ -196,10 +196,12 @@ public class BunnyFootController {
                               break;
                           }
                         } catch (Exception e) {
-                          System.out.println(answers.toString());
+                          result = new BbtiResDto();
+                          result.setBbti("ERROR");
                           error++;
                         }
                         total++;
+                        System.out.println(answers.toString() + " - " + result.getBbti());
                         answers.clear();
                       }
                     }
