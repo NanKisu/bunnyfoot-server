@@ -116,6 +116,11 @@ public class BunnyFootController {
         curQuestion = questionMap.get(curQuestion.getNoNextNo());        
       }
       cur = Integer.parseInt(curQuestion.getCurNo().substring(curQuestion.getCurNo().length() - 1));
+      
+      if(cur.equals(0)) {
+    	  cur = 10; 
+      }
+      
       if(ObjectUtils.isEmpty(curQuestion)) {
         break;
       }
