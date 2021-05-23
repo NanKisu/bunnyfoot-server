@@ -102,7 +102,7 @@ public class BunnyFootController {
     
     Map<String, QuestionDto> questions = questionConfig.getQuestion();
     String[] answerList = answers.split(",");
-    Integer maxScore = 0;
+    Integer maxScore;
     Integer dodoScore = 0;
     Integer inssaScore = 0;
     Integer agyoScore = 0;
@@ -121,10 +121,8 @@ public class BunnyFootController {
     	sundingScore += score.getSunding();
     }
     
-    if(maxScore < dodoScore) {
-    	maxScore = dodoScore;
-    	result.setBbti("DODO");
-    }
+	maxScore = dodoScore;
+	result.setBbti("DODO");
     if(maxScore < inssaScore) {
     	maxScore = inssaScore;
     	result.setBbti("INSSA");
