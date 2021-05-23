@@ -29,6 +29,7 @@ import kr.co.bunnyfoot.bunnyfoot.dto.BbtiResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.MySlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.QuestionDto;
+import kr.co.bunnyfoot.bunnyfoot.dto.ScoreDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.SlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
 import kr.co.bunnyfoot.bunnyfoot.feign.SlackClient;
@@ -99,31 +100,37 @@ public class BunnyFootController {
       }
     }
     
-    Map<String, QuestionDto> questionMap = questionConfig.getQuestionMap();
+    List<QuestionDto> questions = questionConfig.getQuestions();
     String[] answerList = answers.split(",");
-    Integer cur = 1;
-    QuestionDto curQuestion = questionMap.get("1");
-    while(true) {
-      if(!ObjectUtils.isEmpty(curQuestion.getResult())) {
-        result.setBbti(curQuestion.getResult());
-        break;
-      }
-      
-      if(answerList[cur - 1].equals("0")) {
-        curQuestion = questionMap.get(curQuestion.getYestNextNo());
-      }
-      else {
-        curQuestion = questionMap.get(curQuestion.getNoNextNo());        
-      }
-      cur = Integer.parseInt(curQuestion.getCurNo().substring(curQuestion.getCurNo().length() - 1));
-      
-      if(cur.equals(0)) {
-    	  cur = 10; 
-      }
-      
-      if(ObjectUtils.isEmpty(curQuestion)) {
-        break;
-      }
+    Integer maxScore = 0;
+    Integer dodoScore = 0;
+    Integer inssaScore = 0;
+    Integer agyoScore = 0;
+    Integer sundingScore = 0;
+    
+    for(int i = 0; i < 10; i++) {
+    	ScoreDto score = questions.get(i).getScoreMap().get(answerList[i]);
+    	dodoScore += score.getDodo();
+    	inssaScore += score.getInssa();
+    	agyoScore += score.getAgyo();
+    	sundingScore += score.getSunding();
+    }
+    
+    if(maxScore < dodoScore) {
+    	maxScore = dodoScore;
+    	result.setBbti("DODO");
+    }
+    if(maxScore < inssaScore) {
+    	maxScore = inssaScore;
+    	result.setBbti("INSSA");
+    }
+    if(maxScore < agyoScore) {
+    	maxScore = agyoScore;
+    	result.setBbti("AGYO");
+    }
+    if(maxScore < sundingScore) {
+    	maxScore = sundingScore;
+    	result.setBbti("SUNDING");
     }
     
     return result;
