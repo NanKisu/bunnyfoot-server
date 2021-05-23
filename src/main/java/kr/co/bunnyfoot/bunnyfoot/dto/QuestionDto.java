@@ -6,5 +6,6 @@ import lombok.Data;
 
 @Data
 public class QuestionDto {
-  private Map<String, ScoreDto> scoreMap;
+  private ScoreDto trueScore;
+  private ScoreDto falseScore;
 }

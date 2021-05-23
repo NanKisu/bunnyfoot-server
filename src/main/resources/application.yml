@@ -11,117 +11,118 @@ cloud:
       accessKey: ${S3_ACCESS_KEY} 
       secretKey: ${S3_SECRET_KEY}
 
-slack.welcome:  ${SLACK_WELCOME}
+slack.welcome: ${SLACK_WELCOME}
 slack.error: ${SLACK_ERROR}
 
 question:
-  1:
-    0:
-        DODO: -5
-        INSSA: 5
-        AGYO: 6
-        SUNDING: 0
-    1:
-        DODO: 5
-        INSSA: -5
-        AGYO: -6
-        SUNDING: 0
-  2:
-    0:
-        DODO: 10
-        INSSA: -9
-        AGYO: -4
-        SUNDING: 0
-    1:
-        DODO: -10
-        INSSA: 9
-        AGYO: 4
-        SUNDING: 0
-  3:
-    0:
-        DODO: -10
-        INSSA: 0
-        AGYO: 4
-        SUNDING: 9
-    1:
-        DODO: 10
-        INSSA: 0
-        AGYO: -4
-        SUNDING: -9
-  4:
-    0:
-        DODO: 0
-        INSSA: -9
-        AGYO: 0
-        SUNDING: 4
-    1:
-        DODO: 0
-        INSSA: 9
-        AGYO: 0
-        SUNDING: -4
-  5:
-    0:
-        DODO: 4
-        INSSA: 8
-        AGYO: 0
-        SUNDING: 0
-    1:
-        DODO: -4
-        INSSA: -8
-        AGYO: 0
-        SUNDING: 0
-  6:
-    0:
-        DODO: -10
-        INSSA: 10
-        AGYO: 4
-        SUNDING: 0
-    1:
-        DODO: 10
-        INSSA: -10
-        AGYO: -4
-        SUNDING: 0
-  7:
-    0:
-        DODO: 3
-        INSSA: -5
-        AGYO: 0
-        SUNDING: -8
-    1:
-        DODO: -3
-        INSSA: 5
-        AGYO: 0
-        SUNDING: 8
-  8:
-    0:
-        DODO: 7
-        INSSA: 0
-        AGYO: -4
-        SUNDING: -10
-    1:
-        DODO: -7
-        INSSA: 0
-        AGYO: 4
-        SUNDING: 10
-  9:
-    0:
-        DODO: -8
-        INSSA: 5
-        AGYO: 8
-        SUNDING: 9
-    1:
-        DODO: 8
-        INSSA: -5
-        AGYO: -8
-        SUNDING: -9
-  10:
-    0:
-        DODO: -3
-        INSSA: 0
-        AGYO: 0
-        SUNDING: 8
-    1:
-        DODO: 3
-        INSSA: 0
-        AGYO: 0
-        SUNDING: -8      
+    question:
+        1:
+            trueScore:
+                DODO: -5
+                INSSA: 5
+                AGYO: 6
+                SUNDING: 0
+            falseScore:
+                DODO: 5
+                INSSA: -5
+                AGYO: -6
+                SUNDING: 0
+        2:
+            trueScore:
+                DODO: 10
+                INSSA: -9
+                AGYO: -4
+                SUNDING: 0
+            falseScore:
+                DODO: -10
+                INSSA: 9
+                AGYO: 4
+                SUNDING: 0
+        3:
+            trueScore:
+                DODO: -10
+                INSSA: 0
+                AGYO: 4
+                SUNDING: 9
+            falseScore:
+                DODO: 10
+                INSSA: 0
+                AGYO: -4
+                SUNDING: -9
+        4:
+            trueScore:
+                DODO: 0
+                INSSA: -9
+                AGYO: 0
+                SUNDING: 4
+            falseScore:
+                DODO: 0
+                INSSA: 9
+                AGYO: 0
+                SUNDING: -4
+        5:
+            trueScore:
+                DODO: 4
+                INSSA: 8
+                AGYO: 0
+                SUNDING: 0
+            falseScore:
+                DODO: -4
+                INSSA: -8
+                AGYO: 0
+                SUNDING: 0
+        6:
+            trueScore:
+                DODO: -10
+                INSSA: 10
+                AGYO: 4
+                SUNDING: 0
+            falseScore:
+                DODO: 10
+                INSSA: -10
+                AGYO: -4
+                SUNDING: 0
+        7:
+            trueScore:
+                DODO: 3
+                INSSA: -5
+                AGYO: 0
+                SUNDING: -8
+            falseScore:
+                DODO: -3
+                INSSA: 5
+                AGYO: 0
+                SUNDING: 8
+        8:
+            trueScore:
+                DODO: 7
+                INSSA: 0
+                AGYO: -4
+                SUNDING: -10
+            falseScore:
+                DODO: -7
+                INSSA: 0
+                AGYO: 4
+                SUNDING: 10
+        9:
+            trueScore:
+                DODO: -8
+                INSSA: 5
+                AGYO: 8
+                SUNDING: 9
+            falseScore:
+                DODO: 8
+                INSSA: -5
+                AGYO: -8
+                SUNDING: -9
+        10:
+            trueScore:
+                DODO: -3
+                INSSA: 0
+                AGYO: 0
+                SUNDING: 8
+            falseScore:
+                DODO: 3
+                INSSA: 0
+                AGYO: 0
+                SUNDING: -8

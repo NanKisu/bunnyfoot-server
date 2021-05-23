@@ -100,16 +100,21 @@ public class BunnyFootController {
       }
     }
     
-    List<QuestionDto> questions = questionConfig.getQuestions();
+    Map<String, QuestionDto> questions = questionConfig.getQuestion();
     String[] answerList = answers.split(",");
     Integer maxScore = 0;
     Integer dodoScore = 0;
     Integer inssaScore = 0;
     Integer agyoScore = 0;
     Integer sundingScore = 0;
-    
+        
     for(int i = 0; i < 10; i++) {
-    	ScoreDto score = questions.get(i).getScoreMap().get(answerList[i]);
+    	ScoreDto score = null;
+    	if(answerList[i].equals("0")) {
+    		score = questions.get(Integer.toString(i + 1)).getTrueScore();
+    	} else {
+    		score = questions.get(Integer.toString(i + 1)).getFalseScore();
+    	}
     	dodoScore += score.getDodo();
     	inssaScore += score.getInssa();
     	agyoScore += score.getAgyo();
