@@ -71,7 +71,7 @@ public class BunnyFootController {
     if(!ObjectUtils.isEmpty(image)) {
       SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
       File imageFile = new File("home/ubuntu/image/" + df.format(new Date()) + ".png"); 
-      System.out.println(imageFile.getAbsolutePath());
+      
       if(imageFile.createNewFile()) { 
     	try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
           fos.write(image.getBytes()); 
@@ -81,7 +81,7 @@ public class BunnyFootController {
       amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
       if(imageFile.exists()) {
-    	  //imageFile.delete();
+    	  imageFile.delete();
       }
       
       try {
