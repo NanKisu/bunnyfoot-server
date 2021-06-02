@@ -70,7 +70,7 @@ public class BunnyFootController {
     
     if(!ObjectUtils.isEmpty(image)) {
       SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
-      File imageFile = new File(df.format("./" + new Date()) + ".png"); 
+      File imageFile = new File("./" + df.format(new Date()) + ".png"); 
       System.out.println(imageFile.getAbsolutePath());
       if(imageFile.createNewFile()) { 
     	try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
