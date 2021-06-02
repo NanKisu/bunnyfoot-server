@@ -79,6 +79,10 @@ public class BunnyFootController {
       
       amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
+      if(imageFile.exists()) {
+    	  imageFile.delete();
+      }
+      
       try {
         PredictResDto predictRes = predictClient.predict(image);
         if(predictRes.getProbability() < 0.3) {      
