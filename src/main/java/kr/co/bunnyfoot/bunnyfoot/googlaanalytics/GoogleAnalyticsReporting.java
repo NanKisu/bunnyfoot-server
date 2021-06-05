@@ -76,7 +76,7 @@ public class GoogleAnalyticsReporting {
   private GetReportsResponse getReport() throws IOException {
     // Create the DateRange object.
     DateRange dateRange = new DateRange();
-    dateRange.setStartDate("2021-03-01");
+    dateRange.setStartDate("2021-06-05");
     dateRange.setEndDate("today");
 
     // Create the Metrics object.
