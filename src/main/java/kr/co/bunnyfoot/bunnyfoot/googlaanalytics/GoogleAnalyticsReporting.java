@@ -41,6 +41,7 @@ public class GoogleAnalyticsReporting {
     String pageView = "";
     try {
       response = getReport();
+      System.out.println(response);
       pageView = response.getReports().get(0).getData().getTotals().get(0).getValues().get(0);
     } catch (IOException e) {
       // TODO Auto-generated catch block
