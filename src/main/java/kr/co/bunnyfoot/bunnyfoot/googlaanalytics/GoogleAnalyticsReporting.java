@@ -81,7 +81,7 @@ public class GoogleAnalyticsReporting {
 
     // Create the Metrics object.
     Metric sessions = new Metric()
-        .setExpression("ga:pageviews");
+        .setExpression("ga:sessions");
 
     // Create the ReportRequest object.
     ReportRequest request = new ReportRequest()
