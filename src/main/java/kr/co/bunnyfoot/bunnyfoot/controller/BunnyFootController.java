@@ -58,6 +58,7 @@ public class BunnyFootController {
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
     
+  
   @PostMapping("bbti")
   @ApiImplicitParams({
     @ApiImplicitParam(name = "answers", value = "answers", dataType = "string", paramType = "form", example = "0,0,0,0,0,0,0,0,0", required = true),
