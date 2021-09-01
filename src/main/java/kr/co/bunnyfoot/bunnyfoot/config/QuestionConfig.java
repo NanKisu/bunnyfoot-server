@@ -10,5 +10,5 @@ import lombok.Data;
 @Component
 @ConfigurationProperties(prefix = "question")
 public class QuestionConfig {
-  private Map<String, QuestionDto> questionMap;
+  private Map<String, QuestionDto> question;
 }

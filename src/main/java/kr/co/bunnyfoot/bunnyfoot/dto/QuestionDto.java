@@ -4,8 +4,6 @@ import lombok.Data;
 
 @Data
 public class QuestionDto {
-  private String curNo;
-  private String yestNextNo;
-  private String noNextNo;
-  private String result;
+  private ScoreDto trueScore;
+  private ScoreDto falseScore;
 }

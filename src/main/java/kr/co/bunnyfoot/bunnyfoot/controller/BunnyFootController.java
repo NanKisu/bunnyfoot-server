@@ -29,6 +29,7 @@ import kr.co.bunnyfoot.bunnyfoot.dto.BbtiResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.MySlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.PredictResDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.QuestionDto;
+import kr.co.bunnyfoot.bunnyfoot.dto.ScoreDto;
 import kr.co.bunnyfoot.bunnyfoot.dto.SlackSendDto;
 import kr.co.bunnyfoot.bunnyfoot.feign.PredictClient;
 import kr.co.bunnyfoot.bunnyfoot.feign.SlackClient;
@@ -69,7 +70,8 @@ public class BunnyFootController {
     
     if(!ObjectUtils.isEmpty(image)) {
       SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
-      File imageFile = new File(image.getOriginalFilename()); 
+      File imageFile = new File("home/ubuntu/image/" + df.format(new Date()) + ".png"); 
+      
       if(imageFile.createNewFile()) { 
     	try (FileOutputStream fos = new FileOutputStream(imageFile)) { 
           fos.write(image.getBytes()); 
@@ -78,6 +80,10 @@ public class BunnyFootController {
       
       amazonS3Client.putObject(new PutObjectRequest(bucket, df.format(new Date()), imageFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
+      if(imageFile.exists()) {
+    	  imageFile.delete();
+      }
+      
       try {
         PredictResDto predictRes = predictClient.predict(image);
         if(predictRes.getProbability() < 0.3) {      
@@ -99,26 +105,40 @@ public class BunnyFootController {
       }
     }
     
-    Map<String, QuestionDto> questionMap = questionConfig.getQuestionMap();
+    Map<String, QuestionDto> questions = questionConfig.getQuestion();
     String[] answerList = answers.split(",");
-    Integer cur = 1;
-    QuestionDto curQuestion = questionMap.get("1");
-    while(true) {
-      if(!ObjectUtils.isEmpty(curQuestion.getResult())) {
-        result.setBbti(curQuestion.getResult());
-        break;
-      }
-      
-      if(answerList[cur - 1].equals("0")) {
-        curQuestion = questionMap.get(curQuestion.getYestNextNo());
-      }
-      else {
-        curQuestion = questionMap.get(curQuestion.getNoNextNo());        
-      }
-      cur = Integer.parseInt(curQuestion.getCurNo().substring(curQuestion.getCurNo().length() - 1));
-      if(ObjectUtils.isEmpty(curQuestion)) {
-        break;
-      }
+    Integer maxScore;
+    Integer dodoScore = 0;
+    Integer inssaScore = 0;
+    Integer agyoScore = 0;
+    Integer sundingScore = 0;
+        
+    for(int i = 0; i < 10; i++) {
+    	ScoreDto score = null;
+    	if(answerList[i].equals("0")) {
+    		score = questions.get(Integer.toString(i + 1)).getTrueScore();
+    	} else {
+    		score = questions.get(Integer.toString(i + 1)).getFalseScore();
+    	}
+    	dodoScore += score.getDodo();
+    	inssaScore += score.getInssa();
+    	agyoScore += score.getAgyo();
+    	sundingScore += score.getSunding();
+    }
+    
+	maxScore = dodoScore;
+	result.setBbti("DODO");
+    if(maxScore < inssaScore) {
+    	maxScore = inssaScore;
+    	result.setBbti("INSSA");
+    }
+    if(maxScore < agyoScore) {
+    	maxScore = agyoScore;
+    	result.setBbti("AGYO");
+    }
+    if(maxScore < sundingScore) {
+    	maxScore = sundingScore;
+    	result.setBbti("SUNDING");
     }
     
     return result;
